@@ -1,44 +1,206 @@
-<!--- HTML copied from: https://github.com/rossplaskow/mobile --->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Rive Canvas Example</title>
-  <script src="https://unpkg.com/@rive-app/webgl2"></script>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background-color: white;
-    }
-    #rive-canvas {
-        width: 100vw;
-        height: 100vh;
-        display: block;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SamuelNotFound</title>
+    
+    <!-- Monospace Font Stack -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Rive Runtime (Using standard canvas package) -->
+    <script src="https://unpkg.com/@rive-app/canvas@2.15.4"></script>
+
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --link-color: #61dafb;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Fira Mono', 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* Top Section: Rive Animation Container - Height reduced to 40vh */
+        #canvas-container {
+            width: 100%;
+            height: 40vh; /* Reduced height */
+            min-height: 300px; /* Reduced minimum height */
+            position: relative;
+            background-color: #111;
+            border-bottom: 4px solid #000;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Loading/Error Message Overlay */
+        #rive-status {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff4d4d;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+
+        /* Bottom Section: Content */
+        main {
+            width: 90%;
+            max-width: 700px;
+            padding: 2rem 0;
+            box-sizing: border-box;
+        }
+        
+        .typing-svg {
+            width: 100%;
+            max-width: 435px;
+            height: auto;
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--link-color);
+            transition: all 0.2s;
+        }
+
+        a:hover {
+            background-color: var(--link-color);
+            color: #000;
+        }
+
+        ul {
+            list-style-type: '>';
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 1rem;
+            padding-left: 10px;
+        }
+
+        strong {
+            color: #fff;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            #canvas-container {
+                height: 35vh; /* Even smaller on mobile */
+                min-height: 250px;
+            }
+            body {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <canvas id="rive-canvas"></canvas>
-  <script>
-    const canvas = document.getElementById("rive-canvas");
-    const riveAnimation = new rive.Rive({
-      src: 'skeleton.riv',
-      stateMachines: 'State Machine 1',
-      canvas: canvas,
-      artboard: 'Artboard',
-      autoplay: true
-    });
 
-    function resizeCanvas() {
-      canvas.width = canvas.clientWidth;
-      canvas.height = canvas.clientHeight;
-      riveAnimation.resizeDrawingSurfaceToCanvas();
-    }
-      
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-  </script>
+    <!-- Rive Canvas Section -->
+    <div id="canvas-container">
+        <canvas id="rive-canvas"></canvas>
+        <div id="rive-status"></div>
+    </div>
+
+    <!-- README Content Section -->
+    <main>
+        <!-- Typing SVG Header -->
+        <a href="https://git.io/typing-svg">
+            <img class="typing-svg" src="https://readme-typing-svg.herokuapp.com?font=Press+Start+2P&size=15&duration=2000&pause=10000&color=F7F7F7&background=090C11&center=true&vCenter=true&width=435&lines=hey+there%2C+i'm+sam!" alt="Typing SVG" />
+        </a>
+
+        <p>i'm a radiologic technology student-intern. i create interactive animations on rive whenever i feel like.</p>
+
+        <ul>
+            <li><strong>rive:</strong> <a href="https://samuelnotfound.github.io/rive-skeleton/">interactive radtech skeleton</a></li>
+        </ul>
+
+        <p>some hackintosh related stuff:</p>
+
+        <ul>
+            <li>
+                improved <a href="https://github.com/5T33Z0/OC-Little-Translated/blob/main/Content/03_USB_Fixes/ACPI_Mapping_USB_Ports/XHUB_Method/README.md">ACPI USB Mapping Guide</a> based on my <a href="https://github.com/samuelnotfound/miscellaneous-hackintosh-guides/blob/main/SSDT_USB_Mapping/README.md">original guide</a>
+            </li>
+            <li>
+                my <a href="https://github.com/samuelnotfound/E1-572G-Hackintosh">hackintosh config</a> for Acer Aspire E1-572G (archived)
+            </li>
+            <li>
+                my <a href="https://github.com/samuelnotfound/miscellaneous-hackintosh-guides">miscellaneous hackintosh guide</a> (archived)
+            </li>
+        </ul>
+    </main>
+
+    <script>
+        const canvas = document.getElementById("rive-canvas");
+        const statusElement = document.getElementById("rive-status");
+        
+        // Using the local file path, assuming skeleton.riv is next to this HTML file.
+        const riveFileUrl = 'skeleton.riv';
+
+        let riveAnimation;
+
+        function initializeRive() {
+            if (typeof rive === 'undefined') {
+                statusElement.innerHTML = "Rive library failed to load.";
+                return;
+            }
+            
+            riveAnimation = new rive.Rive({
+                src: riveFileUrl,
+                stateMachines: 'State Machine 1',
+                canvas: canvas,
+                layout: new rive.Layout({
+                    fit: rive.Fit.Cover,
+                    alignment: rive.Alignment.Center,
+                }),
+                autoplay: true,
+                onLoad: () => {
+                    console.log("Rive animation loaded successfully from local path.");
+                    statusElement.style.display = 'none';
+                    riveAnimation.resizeDrawingSurfaceToCanvas();
+                },
+                onError: (err) => {
+                    console.error("RIVE LOAD ERROR:", err);
+                    statusElement.innerHTML = `ERROR: Failed to load Rive file from local path '${riveFileUrl}'. Please ensure the file is present.`;
+                    statusElement.style.color = '#ff4d4d';
+                }
+            });
+        }
+
+        function resizeCanvas() {
+            if (riveAnimation) {
+                riveAnimation.resizeDrawingSurfaceToCanvas();
+            }
+        }
+          
+        window.addEventListener('resize', resizeCanvas);
+        
+        initializeRive();
+    </script>
 </body>
 </html>
+
